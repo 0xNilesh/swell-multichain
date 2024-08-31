@@ -1,0 +1,4 @@
+@openzeppelin/contracts-upgradeable=lib/openzeppelin-contracts-upgradeable/contracts
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+@prb/math/src=lib/prb-math/src
+solidity-bytes-utils/contracts=lib/solidity-bytes-utils/contracts
