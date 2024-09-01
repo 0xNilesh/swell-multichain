@@ -17,8 +17,6 @@ contract LayerTransmitter is Ownable {
     uint16 public WORMHOLE_RECIPIENT_CHAIN;
     address public sourceSentinel;
 
-    address public pushChannelAdmin;
-
     /**
      * @notice Initializes the contract by setting the source sentinel address
      * @dev Sets the `sourceSentinel` and initializes `Ownable`
@@ -76,8 +74,8 @@ contract LayerTransmitter is Ownable {
         NttManager.transfer{value: tokenBridgeCost}(
             amount,
             recipientChain,
-            addressToBytes32(sourceSentinel),
-            addressToBytes32(msg.sender),
+            _addressToBytes32(sourceSentinel),
+            _addressToBytes32(msg.sender),
             false,
             new bytes(1)
         );
@@ -140,7 +138,7 @@ contract LayerTransmitter is Ownable {
      * @param _addr The EVM address to be converted to bytes32
      * @return bytes32 The bytes32 representation of the address
      */
-    function addressToBytes32(address _addr) internal pure returns (bytes32) {
+    function _addressToBytes32(address _addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(_addr)));
     }
 }
