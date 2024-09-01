@@ -2,3 +2,4 @@
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
 @prb/math/src=lib/prb-math/src
 solidity-bytes-utils/contracts=lib/solidity-bytes-utils/contracts
+wormhole-solidity-sdk=lib/wormhole-solidity-sdk/src

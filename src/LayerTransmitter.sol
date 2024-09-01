@@ -7,6 +7,7 @@ import "./interfaces/wormhole/IWormholeRelayer.sol";
 import "./libraries/wormhole-lib/TransceiverStructs.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract LayerTransmitter is Ownable {
     IERC20 public WETH_NTT;
@@ -20,6 +21,17 @@ contract LayerTransmitter is Ownable {
 
     constructor(address _sourceSentinel) Ownable() {
         sourceSentinel = _sourceSentinel;
+    }
+
+    /**
+     * @notice This function converts an address to a bytes32 value
+     * @dev This function performs type casting to convert an address to a bytes32.
+     *      It first converts the address to a uint160, then to a uint256, and finally to a bytes32.
+     * @param _addr The EVM address to be converted to bytes32
+     * @return bytes32 The bytes32 representation of the address
+     */
+    function addressToBytes32(address _addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(_addr)));
     }
 
     function setBridgeConfig(
@@ -61,7 +73,7 @@ contract LayerTransmitter is Ownable {
         (cost,) = WORMHOLE_RELAYER.quoteEVMDeliveryPrice(targetChain, 0, gasLimit);
     }
 
-    function deposit(uint256 amount, bytes32 recipient) external {
+    function deposit(uint256 amount, uint256 gasLimit) external {
         // Transfer WETH_NTT tokens from the sender to this contract
         require(WETH_NTT.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
@@ -76,8 +88,8 @@ contract LayerTransmitter is Ownable {
         NttManager.transfer{ value: tokenBridgeCost }(
             amount,
             recipientChain,
-            BaseHelper.addressToBytes32(sourceSentinel),
-            BaseHelper.addressToBytes32(msg.sender),
+            addressToBytes32(sourceSentinel),
+            addressToBytes32(msg.sender),
             false,
             new bytes(1)
         );
